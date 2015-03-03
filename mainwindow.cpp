@@ -70,7 +70,7 @@ void MainWindow::openImage(const QString &path)
                                   QMessageBox::Cancel);
             return;
         }
-        ship4vImage = newImage;
+        mShip1hImage = newImage;
         setupShips();
     }
 }
@@ -83,13 +83,14 @@ void MainWindow::setupShips()
 //            seaWidget->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     shipsList->clear();
-int x = 0;
-int y = 0;
+    int x = 0;
+    int y = 0;
 //    for (int y = 0; y < 5; ++y) {
 //        for (int x = 0; x < 5; ++x) {
             int pieceSize = seaWidget->getShipSize();
-            QPixmap pieceImage = ship4vImage.copy(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
+            QPixmap pieceImage = mShip1hImage.copy(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
             shipsList->addShip(pieceImage, QPoint(x, y));
+//            shipsList->addShip(pieceImage, QPoint(x, y));
 //        }
 //    }
 

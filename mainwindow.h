@@ -22,7 +22,7 @@ private:
     void setupMenus();
     void setupWidgets();
 
-    QPixmap ship4vImage;
+    QPixmap     mShip1hImage;
     ShipsList *shipsList;
     SeaWidget *seaWidget;
 

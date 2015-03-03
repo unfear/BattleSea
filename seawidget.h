@@ -25,11 +25,11 @@ protected:
 
 private:
     const QRect targetSquare(const QPoint &position) const;
+    int findPiece(const QRect &pieceRect) const;
 
-    int mShipSize;
+    int mBoardSize;
     QList<QPixmap> piecePixmaps;
     QList<QRect> pieceRects;
-    QList<QPoint> pieceLocations;
     QRect highlightedRect;
     bool bDrawShip;
 

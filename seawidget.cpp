@@ -11,12 +11,12 @@ SeaWidget::SeaWidget(QWidget *parent) :
 }
 
 SeaWidget::SeaWidget(int shipSize, QWidget *parent) :
-    mShipSize(shipSize), QWidget(parent)
+    mBoardSize(shipSize), QWidget(parent)
 {
     bDrawShip = false;
     setAcceptDrops(true);
-    setMinimumSize(mShipSize, mShipSize);
-    setMaximumSize(mShipSize, mShipSize);
+    setMinimumSize(mBoardSize, mBoardSize);
+    setMaximumSize(mBoardSize, mBoardSize);
 
     // Try to implement battle grid
     int x0, y0, x1, y1;
@@ -24,12 +24,11 @@ SeaWidget::SeaWidget(int shipSize, QWidget *parent) :
     x1 = y1 = 40;
     int step = 40;
 
-    Qt::GlobalColor color = Qt::green;
     for (int i = 0; i <= 100; ++i)
     {
         QRect square(x0, y0, x1, y1);
         QPixmap pixmap(40, 40);
-        pixmap.fill(color);
+        pixmap.fill(Qt::GlobalColor(Qt::transparent));
 
         piecePixmaps.append(pixmap);
         pieceRects.append(square);
@@ -47,24 +46,23 @@ SeaWidget::SeaWidget(int shipSize, QWidget *parent) :
             x0 += step;
             x1 += step;
         }
-        switch(color)
-        {
-            case Qt::green:
-                color = Qt::red;
-                break;
-            case Qt::red:
-                color = Qt::blue;
-                break;
-            case Qt::blue:
-                color = Qt::green;
-                break;
-        }
     }
 }
 
 int SeaWidget::getShipSize() const
 {
-    return mShipSize;
+    return mBoardSize/10;
+}
+
+int SeaWidget::findPiece(const QRect &pieceRect) const
+{
+    for (int i = 0; i < pieceRects.size(); ++i) {
+        QRect rect = pieceRects[i];
+        if (pieceRect.top() == rect.top() && pieceRect.left() == rect.left()) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void SeaWidget::paintEvent(QPaintEvent *event)
@@ -73,7 +71,7 @@ void SeaWidget::paintEvent(QPaintEvent *event)
     painter.begin(this);
     painter.fillRect(event->rect(), Qt::white);
 
-    highlightedRect = QRect(0, 0, mShipSize, mShipSize);
+    highlightedRect = QRect(0, 0, mBoardSize, mBoardSize);
 
     if (highlightedRect.isValid()) {
         painter.setBrush(QColor("#ffcccc"));
@@ -81,16 +79,18 @@ void SeaWidget::paintEvent(QPaintEvent *event)
         painter.drawRect(highlightedRect.adjusted(0, 0, -1, -1));
     }
 
-    cout << pieceRects.size() << endl;
+    cout << "pieceRects:" << pieceRects.size() << endl;
 
     for (int i = 0; i < pieceRects.size(); ++i) {
         if(bDrawShip == false)
+        {
+            cout << "Do not draw ship:" << i << endl;
             painter.drawRect(pieceRects[i]);
+        }
         else
         {
-            cout << "pieceRects index: " << i << endl;
-            painter.setBrush(QColor("#ffcccc"));
-            painter.setPen(Qt::SolidLine);
+            cout << "Draw ship:" << i << endl;
+            painter.drawRect(pieceRects[i]);    //  for black borders
             painter.drawPixmap(pieceRects[i], piecePixmaps[i]);
         }
     }
@@ -99,20 +99,18 @@ void SeaWidget::paintEvent(QPaintEvent *event)
 
 void SeaWidget::clear()
 {
-    pieceLocations.clear();
     piecePixmaps.clear();
     pieceRects.clear();
     highlightedRect = QRect();
-//    inPlace = 0;
     update();
 }
 
 void SeaWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-//    if (event->mimeData()->hasFormat("image/x-puzzle-piece"))
+    if (event->mimeData()->hasFormat("image/x-puzzle-piece"))
         event->accept();
-//    else
-//        event->ignore();
+    else
+        event->ignore();
 }
 
 void SeaWidget::dragLeaveEvent(QDragLeaveEvent *event)
@@ -130,31 +128,32 @@ const QRect SeaWidget::targetSquare(const QPoint &position) const
 
 void SeaWidget::dropEvent(QDropEvent *event)
 {
-        QRect square = targetSquare(event->pos());
+    cout << "DropEvent" << endl;
+    if (event->mimeData()->hasFormat("image/x-puzzle-piece")) {
         bDrawShip = true;
+        cout << "mimeData hasFormat image/x-puzzle-piece" << endl;
 
-        QPixmap pixmap(40, 40);
-        pixmap.load(":/images/images/ship4v_1.png");
-        piecePixmaps.replace(0, pixmap);
+        QByteArray pieceData = event->mimeData()->data("image/x-puzzle-piece");
+        QDataStream dataStream(&pieceData, QIODevice::ReadOnly);
+        QRect square = targetSquare(event->pos());
+        QPixmap pixmap;
+        QPoint location;
+        dataStream >> pixmap >> location;
+        cout << "Dropped cell is : " << findPiece(square) << endl;
 
-        QPixmap pixmap2(40, 40);
-        pixmap2.load(":/images/images/ship4v_2.png");
-        piecePixmaps.replace(11, pixmap2);
-
-        QPixmap pixmap3(40, 40);
-        pixmap3.load(":/images/images/ship4v_3.png");
-        piecePixmaps.replace(21, pixmap3);
-
-        QPixmap pixmap4(40, 40);
-        pixmap4.load(":/images/images/ship4v_4.png");
-        piecePixmaps.replace(31, pixmap4);
+        piecePixmaps.replace(findPiece(square),pixmap);
+        pieceRects.replace(findPiece(square),square);
 
         highlightedRect = QRect();
-        update(QRect(0, 0, 40, 40));
-        update(QRect(0, 40, 40, 80));
-        update(QRect(0, 80, 40, 120));
-        update(QRect(0, 120, 40, 160));
+//        update(square);
+        update(QRect(0, 0, 400, 400));
 
         event->setDropAction(Qt::MoveAction);
         event->accept();
+
+    } else {
+        cout << "mimeData not an image/x-puzzle-piece" << endl;
+        highlightedRect = QRect();
+        event->ignore();
+    }
 }

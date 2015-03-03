@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.openImage(":/images/images/ship4v.png");
+    w.openImage(":/images/images/ship1h.png");
     w.show();
     
     return a.exec();

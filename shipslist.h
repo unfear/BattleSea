@@ -10,6 +10,8 @@ class ShipsList  : public QListWidget
 public:
     ShipsList(int shipSize, QWidget *parent = 0);
     void addShip(QPixmap pixmap, QPoint location);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void startDrag(Qt::DropActions supportedActions);
 
 private:
     int mShipSize;
