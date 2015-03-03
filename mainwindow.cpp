@@ -33,7 +33,7 @@ void MainWindow::setupMenus()
     QAction *restartAction = gameMenu->addAction(tr("&Restart"));
 
     connect(exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
-//    connect(restartAction, SIGNAL(triggered()), this, SLOT(setupPuzzle()));
+    connect(restartAction, SIGNAL(triggered()), this, SLOT(setupShips()));
 }
 
 void MainWindow::setupWidgets()
@@ -71,37 +71,11 @@ void MainWindow::openImage(const QString &path)
             return;
         }
         mShip1hImage = newImage;
-        setupShips();
     }
 }
 
 void MainWindow::setupShips()
 {
-//    int size = qMin(ship4vImage.width(), ship4vImage.height());
-//    ship4vImage = ship4vImage.copy((ship4vImage.width() - size)/2,
-//        (ship4vImage.height() - size)/2, size, size).scaled(seaWidget->width(),
-//            seaWidget->height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-    shipsList->clear();
-    int x = 0;
-    int y = 0;
-//    for (int y = 0; y < 5; ++y) {
-//        for (int x = 0; x < 5; ++x) {
-            int pieceSize = seaWidget->getShipSize();
-            QPixmap pieceImage = mShip1hImage.copy(x * pieceSize, y * pieceSize, pieceSize, pieceSize);
-            shipsList->addShip(pieceImage, QPoint(x, y));
-//            shipsList->addShip(pieceImage, QPoint(x, y));
-//        }
-//    }
-
-//    qsrand(QCursor::pos().x() ^ QCursor::pos().y());
-
-//    for (int i = 0; i < shipsList->count(); ++i) {
-//        if (int(2.0*qrand()/(RAND_MAX+1.0)) == 1) {
-//            QListWidgetItem *item = shipsList->takeItem(i);
-//            shipsList->insertItem(0, item);
-//        }
-//    }
-
-//    seaWidget->clear();
+    for(int i = 0; i < shipsNumber; i++)
+        shipsList->addShip(mShip1hImage, QPoint());
 }

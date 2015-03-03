@@ -84,12 +84,10 @@ void SeaWidget::paintEvent(QPaintEvent *event)
     for (int i = 0; i < pieceRects.size(); ++i) {
         if(bDrawShip == false)
         {
-            cout << "Do not draw ship:" << i << endl;
             painter.drawRect(pieceRects[i]);
         }
         else
         {
-            cout << "Draw ship:" << i << endl;
             painter.drawRect(pieceRects[i]);    //  for black borders
             painter.drawPixmap(pieceRects[i], piecePixmaps[i]);
         }
@@ -145,8 +143,7 @@ void SeaWidget::dropEvent(QDropEvent *event)
         pieceRects.replace(findPiece(square),square);
 
         highlightedRect = QRect();
-//        update(square);
-        update(QRect(0, 0, 400, 400));
+        update(square);
 
         event->setDropAction(Qt::MoveAction);
         event->accept();

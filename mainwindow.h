@@ -25,6 +25,7 @@ private:
     QPixmap     mShip1hImage;
     ShipsList *shipsList;
     SeaWidget *seaWidget;
+    const int shipsNumber = 4;
 
 public slots:
     void openImage(const QString &path = QString());
