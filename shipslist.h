@@ -15,6 +15,10 @@ public:
 
 private:
     int mShipSize;
+    int mOneDeckShipsCount;
+    int mTwoDeckShipsCount;
+    int mThreeDeckShipsCount;
+    int mFourDeckShipsCount;
 };
 
 #endif // SHIPSLIST_H

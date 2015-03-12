@@ -20,16 +20,31 @@ public:
     
 private:
     Ui::MainWindow *ui;
+    /// add menu to window
     void setupMenus();
+    /// add ships list, battlefields to window
     void setupWidgets();
 
-    QPixmap     mShip1hImage;
+    /// 1-2-3-4 Deck ships icons
+    /// TODO: move to ShipsList class
+    QPixmap     mOneDeckShipImage;
+    QPixmap     mTwoDwckShipImage;
+    QPixmap     mThreeDeckShipImage;
+    QPixmap     mFourDeckShipImage;
+
+    /// widget contain ships icons
     ShipsList *shipsList;
+    /// user battlefield
     SeaWidget *seaWidget;
-    const int shipsNumber = 4;
+    /// enemy battlefield
+    SeaWidget *seaWidgetEnemy;
+    /// define ships count. usually is 4
+    const int mShipsNumber;
 
 public slots:
-    void openImage(const QString &path = QString());
+    /// load image from resources
+    QPixmap openImage(const QString &path = QString());
+    /// add ships to ShipsList
     void setupShips();
 };
 

@@ -6,7 +6,11 @@
 QTextStream ccout(stdout);
 
 ShipsList::ShipsList(int shipSize, QWidget *parent) :
-    mShipSize(shipSize), QListWidget(parent)
+    mShipSize(shipSize), QListWidget(parent),
+    mOneDeckShipsCount(4),
+    mTwoDeckShipsCount(3),
+    mThreeDeckShipsCount(2),
+    mFourDeckShipsCount(1)
 {
     setDragEnabled(true);
     setViewMode(QListView::IconMode);
@@ -24,6 +28,26 @@ void ShipsList::addShip(QPixmap pixmap, QPoint location)
     shipItem->setData(Qt::UserRole+1, location);
     shipItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable
                         | Qt::ItemIsDragEnabled);
+
+    int curRow = row(shipItem);
+    switch(curRow)
+    {
+        case 0:
+            shipItem->setText(QString::number(mOneDeckShipsCount));
+            break;
+        case 1:
+            shipItem->setText(QString::number(mTwoDeckShipsCount));
+            break;
+        case 2:
+            shipItem->setText(QString::number(mThreeDeckShipsCount));
+            break;
+        case 3:
+            shipItem->setText(QString::number(mFourDeckShipsCount));
+            break;
+    default:
+        shipItem->setText(QString::number(curRow));
+        break;
+    }
 }
 
 void ShipsList::dragMoveEvent(QDragMoveEvent *event)
@@ -56,5 +80,38 @@ void ShipsList::startDrag(Qt::DropActions /*supportedActions*/)
     drag->setPixmap(pixmap);
 
     if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
-        delete takeItem(row(item));
+    {
+        int curRow = row(item);
+        switch(curRow)
+        {
+            case 0:
+                if(--mOneDeckShipsCount == 0)
+                    delete takeItem(row(item));
+                else
+                    selectedItems().takeFirst()->setText(QString::number(mOneDeckShipsCount));
+                break;
+            case 1:
+                if(--mTwoDeckShipsCount == 0)
+                    delete takeItem(row(item));
+                else
+                    selectedItems().takeFirst()->setText(QString::number(mTwoDeckShipsCount));
+                break;
+            case 2:
+                if(--mThreeDeckShipsCount == 0)
+                    delete takeItem(row(item));
+                else
+                    selectedItems().takeFirst()->setText(QString::number(mThreeDeckShipsCount));
+                break;
+            case 3:
+                if(--mFourDeckShipsCount == 0)
+                    delete takeItem(row(item));
+                else
+                    selectedItems().takeFirst()->setText(QString::number(mFourDeckShipsCount));
+                break;
+        }
+//        if(--mOneDeckShipsCount == 0)
+//            delete takeItem(row(item));
+//        else
+//            selectedItems().takeFirst()->setText(QString::number(mOneDeckShipsCount));
+    }
 }

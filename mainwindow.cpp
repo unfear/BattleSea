@@ -6,7 +6,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mShipsNumber(4)
 {
     ui->setupUi(this);
     setupMenus();
@@ -18,8 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete seaWidget;
     delete shipsList;
+    delete seaWidgetEnemy;
+    delete seaWidget;
     delete ui;
 }
 
@@ -44,6 +46,7 @@ void MainWindow::setupWidgets()
     QHBoxLayout *frameLayout = new QHBoxLayout(frame);
 
     seaWidget = new SeaWidget(400, this);
+    seaWidgetEnemy = new SeaWidget(400, this);
     shipsList = new ShipsList(seaWidget->getShipSize(), this);
 
 
@@ -52,10 +55,11 @@ void MainWindow::setupWidgets()
 
     frameLayout->addWidget(shipsList);
     frameLayout->addWidget(seaWidget);
+    frameLayout->addWidget(seaWidgetEnemy);
     setCentralWidget(frame);
 }
 
-void MainWindow::openImage(const QString &path)
+QPixmap MainWindow::openImage(const QString &path)
 {
     QString fileName = path;
 
@@ -69,14 +73,26 @@ void MainWindow::openImage(const QString &path)
             QMessageBox::warning(this, tr("Open Image"),
                                   tr("The image file could not be loaded."),
                                   QMessageBox::Cancel);
-            return;
+            return QPixmap();
         }
-        mShip1hImage = newImage;
+        return newImage;
     }
+
+    return QPixmap();
 }
 
 void MainWindow::setupShips()
 {
-    for(int i = 0; i < shipsNumber; i++)
-        shipsList->addShip(mShip1hImage, QPoint());
+    QList<QString> images{":/images/images/ship1h.png", ":/images/images/ship1h.png",
+                          ":/images/images/ship1h.png", ":/images/images/ship1h.png"};
+    for(auto &x : images)
+        shipsList->addShip(openImage(x), QPoint());
+
+//    mOneDeckShipImage = openImage(":/images/images/ship1h.png");
+//    mTwoDwckShipImage = openImage(":/images/images/ship1h.png");;
+//    mThreeDeckShipImage = openImage(":/images/images/ship1h.png");;
+//    mFourDeckShipImage = openImage(":/images/images/ship1h.png");;
+
+//    for(int i = 0; i < mShipsNumber; i++)
+//        shipsList->addShip(mOneDeckShipImage, QPoint());
 }
