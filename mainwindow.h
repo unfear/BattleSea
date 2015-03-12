@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "seawidget.h"
 #include "shipslist.h"
+#include <memory>
 
 namespace Ui {
 class MainWindow;

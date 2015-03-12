@@ -1,13 +1,14 @@
 #include <QApplication>
 #include "mainwindow.h"
+#include "gamemanager.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.openImage(":/images/images/ship1h.png");
-    w.setupShips();
-    w.show();
-    
+
+    GameManager game;
+    game.setApplicationRole();
+    game.createUI();
+
     return a.exec();
 }

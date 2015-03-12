@@ -9,15 +9,22 @@ QT       += core gui widgets
 TARGET = BattleSea
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     shipslist.cpp \
-    seawidget.cpp
+    seawidget.cpp \
+    gamemanager.cpp \
+    uimanager.cpp \
+    networkmanager.cpp
 
 HEADERS  += mainwindow.h \
     shipslist.h \
-    seawidget.h
+    seawidget.h \
+    gamemanager.h \
+    uimanager.h \
+    networkmanager.h
 
 FORMS    += mainwindow.ui
 

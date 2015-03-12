@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    delete seaWidget;
+    delete shipsList;
     delete ui;
 }
 
@@ -38,11 +40,10 @@ void MainWindow::setupMenus()
 
 void MainWindow::setupWidgets()
 {
-    QFrame *frame = new QFrame;
+    QFrame *frame = new QFrame(this);
     QHBoxLayout *frameLayout = new QHBoxLayout(frame);
 
-    seaWidget = new SeaWidget(400);
-
+    seaWidget = new SeaWidget(400, this);
     shipsList = new ShipsList(seaWidget->getShipSize(), this);
 
 
