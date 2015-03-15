@@ -154,3 +154,25 @@ void SeaWidget::dropEvent(QDropEvent *event)
         event->ignore();
     }
 }
+
+bool SeaWidget::checkClash(int clickedCell) const
+{
+    QPixmap pixmap(40, 40);
+    pixmap.fill(Qt::GlobalColor(Qt::transparent));
+    if(piecePixmaps[clickedCell].toImage() != pixmap.toImage())
+        return true;
+    else
+        return false;
+}
+
+void SeaWidget::mousePressEvent(QMouseEvent *event)
+{
+    // ERROR: 9 position, next 11. where is 10th ???
+    QRect square = targetSquare(event->pos());
+    int found = findPiece(square);
+    cout << "Clicked to " << found << " position!" << endl;
+    if(checkClash(found))
+        cout << "BANG!" << endl;
+    else
+        cout << "MISS!" << endl;
+}
