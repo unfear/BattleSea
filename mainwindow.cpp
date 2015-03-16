@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setupMenus();
     setupWidgets();
+    setupReadyButton();
+    setupRoleLabel();
 
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     setWindowTitle(tr("SeaBattle"));
@@ -48,6 +50,7 @@ void MainWindow::setupWidgets()
     seaWidget = new SeaWidget(400, this);
     seaWidgetEnemy = new SeaWidget(400, this);
     shipsList = new ShipsList(seaWidget->getShipSize(), this);
+    shipsList->setMinimumWidth(seaWidget->getShipSize()*4); // 10 is a list gap
 
 
 //    connect(seaWidget, SIGNAL(puzzleCompleted()),
@@ -57,6 +60,29 @@ void MainWindow::setupWidgets()
     frameLayout->addWidget(seaWidget);
     frameLayout->addWidget(seaWidgetEnemy);
     setCentralWidget(frame);
+}
+
+void MainWindow::setupReadyButton()
+{
+    QIcon icon(":/images/images/notready.png");
+    mReadyBtn = new QPushButton(icon, "Ready?", this);
+    mReadyBtn->setGeometry(QRect(QPoint(ui->menuBar->sizeHint().rwidth(), 0), QSize(60, 20)));
+    // Connect button signal to appropriate slot
+    connect(mReadyBtn, SIGNAL(released()),this, SLOT(handleButton()));
+
+}
+
+void MainWindow::handleButton()
+{
+    QIcon icon(":/images/images/ready.png");
+    mReadyBtn->setIcon(icon);
+}
+
+void MainWindow::setupRoleLabel()
+{
+    mRoleLabel = new QLabel("You are Client", this);
+    QPoint startPoint(ui->menuBar->sizeHint().rwidth()+mReadyBtn->size().rwidth()+10, 0);
+    mRoleLabel->setGeometry(QRect(startPoint, QSize(100, 20)));
 }
 
 QPixmap MainWindow::openImage(const QString &path)
@@ -83,8 +109,8 @@ QPixmap MainWindow::openImage(const QString &path)
 
 void MainWindow::setupShips()
 {
-    QList<QString> images{":/images/images/ship1h.png", ":/images/images/ship1h.png",
-                          ":/images/images/ship1h.png", ":/images/images/ship1h.png"};
+    QList<QString> images{":/images/images/ship1h.png", ":/images/images/ship2h.png",
+                          ":/images/images/ship3h.png", ":/images/images/ship4h.png"};
     for(auto &x : images)
         shipsList->addShip(openImage(x), QPoint());
 

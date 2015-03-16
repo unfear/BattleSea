@@ -5,6 +5,8 @@
 #include "seawidget.h"
 #include "shipslist.h"
 #include <memory>
+#include <QPushButton>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -15,15 +17,19 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget * parent = 0);
     ~MainWindow();
     
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow * ui;
     /// add menu to window
     void setupMenus();
     /// add ships list, battlefields to window
     void setupWidgets();
+    /// add Ready button
+    void setupReadyButton();
+    /// add role label
+    void setupRoleLabel();
 
     /// 1-2-3-4 Deck ships icons
     /// TODO: move to ShipsList class
@@ -33,19 +39,26 @@ private:
     QPixmap     mFourDeckShipImage;
 
     /// widget contain ships icons
-    ShipsList *shipsList;
+    ShipsList * shipsList;
     /// user battlefield
-    SeaWidget *seaWidget;
+    SeaWidget * seaWidget;
     /// enemy battlefield
-    SeaWidget *seaWidgetEnemy;
+    SeaWidget * seaWidgetEnemy;
     /// define ships count. usually is 4
     const int mShipsNumber;
+    /// Ready button
+    QPushButton * mReadyBtn;
+    /// client or server role label
+    QLabel * mRoleLabel;
 
 public slots:
     /// load image from resources
     QPixmap openImage(const QString &path = QString());
     /// add ships to ShipsList
     void setupShips();
+
+private slots:
+    void handleButton();
 };
 
 #endif // MAINWINDOW_H

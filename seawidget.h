@@ -28,11 +28,11 @@ private:
     int findPiece(const QRect &pieceRect) const;
     bool checkClash(int clickedCell) const;
 
-    int mBoardSize;
+    int mBoardSize{0};
     QList<QPixmap> piecePixmaps;
     QList<QRect> pieceRects;
     QRect highlightedRect;
-    bool bDrawShip;
+    QList<bool> mIsShipHere;
 
 signals:
     

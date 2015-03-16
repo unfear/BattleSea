@@ -14,8 +14,9 @@ ShipsList::ShipsList(int shipSize, QWidget *parent) :
 {
     setDragEnabled(true);
     setViewMode(QListView::IconMode);
-    setIconSize(QSize(40, 40));
-    setSpacing(10);
+//    setLayoutMode(QListView::SinglePass);
+    setIconSize(QSize(160, 40));
+//    setSpacing(10);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
 }

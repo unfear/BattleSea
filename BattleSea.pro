@@ -9,6 +9,8 @@ QT       += core gui widgets
 TARGET = BattleSea
 TEMPLATE = app
 
+CONFIG += c++11
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     shipslist.cpp \

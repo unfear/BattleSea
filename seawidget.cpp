@@ -8,12 +8,12 @@ QTextStream cout(stdout);
 SeaWidget::SeaWidget(QWidget *parent) :
     QWidget(parent)
 {
+
 }
 
 SeaWidget::SeaWidget(int shipSize, QWidget *parent) :
     mBoardSize(shipSize), QWidget(parent)
 {
-    bDrawShip = false;
     setAcceptDrops(true);
     setMinimumSize(mBoardSize, mBoardSize);
     setMaximumSize(mBoardSize, mBoardSize);
@@ -32,6 +32,7 @@ SeaWidget::SeaWidget(int shipSize, QWidget *parent) :
 
         piecePixmaps.append(pixmap);
         pieceRects.append(square);
+        mIsShipHere.append(false);
 
         if(i != 0 && i%10 == 0)
         {
@@ -82,15 +83,8 @@ void SeaWidget::paintEvent(QPaintEvent *event)
     cout << "pieceRects:" << pieceRects.size() << endl;
 
     for (int i = 0; i < pieceRects.size(); ++i) {
-        if(bDrawShip == false)
-        {
-            painter.drawRect(pieceRects[i]);
-        }
-        else
-        {
-            painter.drawRect(pieceRects[i]);    //  for black borders
-            painter.drawPixmap(pieceRects[i], piecePixmaps[i]);
-        }
+        painter.drawRect(pieceRects[i]);    //  for black borders
+        painter.drawPixmap(pieceRects[i], piecePixmaps[i]);
     }
     painter.end();
 }
@@ -128,7 +122,6 @@ void SeaWidget::dropEvent(QDropEvent *event)
 {
     cout << "DropEvent" << endl;
     if (event->mimeData()->hasFormat("image/x-puzzle-piece")) {
-        bDrawShip = true;
         cout << "mimeData hasFormat image/x-puzzle-piece" << endl;
 
         QByteArray pieceData = event->mimeData()->data("image/x-puzzle-piece");
@@ -137,10 +130,12 @@ void SeaWidget::dropEvent(QDropEvent *event)
         QPixmap pixmap;
         QPoint location;
         dataStream >> pixmap >> location;
-        cout << "Dropped cell is : " << findPiece(square) << endl;
+        int foundCell = findPiece(square);
+        cout << "Dropped cell is : " << foundCell << endl;
 
-        piecePixmaps.replace(findPiece(square),pixmap);
-        pieceRects.replace(findPiece(square),square);
+        piecePixmaps.replace(foundCell,pixmap);
+        pieceRects.replace(foundCell,square);
+        mIsShipHere.replace(foundCell, true);
 
         highlightedRect = QRect();
         update(square);
@@ -160,9 +155,12 @@ bool SeaWidget::checkClash(int clickedCell) const
     QPixmap pixmap(40, 40);
     pixmap.fill(Qt::GlobalColor(Qt::transparent));
     if(piecePixmaps[clickedCell].toImage() != pixmap.toImage())
-        return true;
-    else
-        return false;
+    {
+        if(mIsShipHere[clickedCell] == true)
+            return true;
+    }
+
+    return false;
 }
 
 void SeaWidget::mousePressEvent(QMouseEvent *event)
@@ -172,7 +170,26 @@ void SeaWidget::mousePressEvent(QMouseEvent *event)
     int found = findPiece(square);
     cout << "Clicked to " << found << " position!" << endl;
     if(checkClash(found))
+    {
+        //TODO: add hit ships icon to piecePixmaps[found]
         cout << "BANG!" << endl;
+        QPixmap hitCross(":/images/images/hitCross.png");
+//        piecePixmaps.replace(found,hitCross);
+//        pieceRects.replace(found,square);
+
+        QPainter pixPaint(&piecePixmaps[found]);
+        QBrush brush2( Qt::blue);
+        pixPaint.setBrush(brush2);
+        pixPaint.drawImage(QPoint(10,10),hitCross.toImage());
+        pieceRects.replace(found,square);
+    }
     else
+    {
+        //TODO: add miss point icon to piecePixmaps[found]
         cout << "MISS!" << endl;
+        QPixmap missDot(":/images/images/missDot.png");
+        piecePixmaps.replace(found,missDot);
+        pieceRects.replace(found,square);
+    }
+    update(square);
 }

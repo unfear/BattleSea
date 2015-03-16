@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/images">
         <file>images/ship1h.png</file>
+        <file>images/notready.png</file>
+        <file>images/ready.png</file>
+        <file>images/hitCross.png</file>
+        <file>images/missDot.png</file>
+        <file>images/ship2h.png</file>
+        <file>images/ship3h.png</file>
+        <file>images/ship4h.png</file>
     </qresource>
 </RCC>
