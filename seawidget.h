@@ -27,6 +27,7 @@ private:
     const QRect targetSquare(const QPoint &position) const;
     int findPiece(const QRect &pieceRect) const;
     bool checkClash(int clickedCell) const;
+    void addShipsPiece(int cell, QRect square, QPixmap piece);
 
     int mBoardSize{0};
     QList<QPixmap> piecePixmaps;

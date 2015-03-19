@@ -117,6 +117,13 @@ const QRect SeaWidget::targetSquare(const QPoint &position) const
 {
     return QRect(position.x()/getShipSize() * getShipSize(), position.y()/getShipSize() * getShipSize(), getShipSize(), getShipSize());
 }
+void SeaWidget::addShipsPiece(int cell, QRect square, QPixmap piece)
+{
+    piecePixmaps.replace(cell,piece);
+    pieceRects.replace(cell,square);
+    mIsShipHere.replace(cell, true);
+    update(square);
+}
 
 void SeaWidget::dropEvent(QDropEvent *event)
 {
@@ -133,12 +140,45 @@ void SeaWidget::dropEvent(QDropEvent *event)
         int foundCell = findPiece(square);
         cout << "Dropped cell is : " << foundCell << endl;
 
-        piecePixmaps.replace(foundCell,pixmap);
-        pieceRects.replace(foundCell,square);
-        mIsShipHere.replace(foundCell, true);
+        int dropedShipWidth = pixmap.width();
+        switch(dropedShipWidth)
+        {
+            case 40:
+                addShipsPiece(foundCell, square, pixmap);
+                break;
+            case 80:
+                addShipsPiece(foundCell, square, pixmap.copy(0, 0, 40, 40));
+
+                square = targetSquare(QPoint(event->pos().x()+40, event->pos().y()));
+                addShipsPiece(++foundCell, square, pixmap.copy(40, 0, 80, 40));
+                break;
+            case 120:
+                addShipsPiece(foundCell, square, pixmap.copy(0, 0, 40, 40));
+
+                square = targetSquare(QPoint(event->pos().x()+40, event->pos().y()));
+                addShipsPiece(++foundCell, square, pixmap.copy(40, 0, 40, 40));
+
+                square = targetSquare(QPoint(event->pos().x()+80, event->pos().y()));
+                addShipsPiece(++foundCell, square, pixmap.copy(80, 0, 40, 40));
+                break;
+            case 160:
+                addShipsPiece(foundCell, square, pixmap.copy(0, 0, 40, 40));
+
+                square = targetSquare(QPoint(event->pos().x()+40, event->pos().y()));
+                addShipsPiece(++foundCell, square, pixmap.copy(40, 0, 40, 40));
+
+                square = targetSquare(QPoint(event->pos().x()+80, event->pos().y()));
+                addShipsPiece(++foundCell, square, pixmap.copy(80, 0, 40, 40));
+
+                square = targetSquare(QPoint(event->pos().x()+120, event->pos().y()));
+                addShipsPiece(++foundCell, square, pixmap.copy(120, 0, 40, 40));
+                break;
+            default:
+                addShipsPiece(foundCell, square, pixmap);
+                break;
+        }
 
         highlightedRect = QRect();
-        update(square);
 
         event->setDropAction(Qt::MoveAction);
         event->accept();
