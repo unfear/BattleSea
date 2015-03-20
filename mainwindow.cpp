@@ -47,8 +47,8 @@ void MainWindow::setupWidgets()
     QFrame *frame = new QFrame(this);
     QHBoxLayout *frameLayout = new QHBoxLayout(frame);
 
-    seaWidget = new SeaWidget(400, this);
-    seaWidgetEnemy = new SeaWidget(400, this);
+    seaWidget = new SeaWidget(400, SeaWidget::BattleFieldRole::OWN, this);
+    seaWidgetEnemy = new SeaWidget(400, SeaWidget::BattleFieldRole::ENEMY, this);
     shipsList = new ShipsList(seaWidget->getShipSize(), this);
     shipsList->setMinimumWidth(seaWidget->getShipSize()*4); // 10 is a list gap
 

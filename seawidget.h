@@ -11,7 +11,11 @@ class SeaWidget : public QWidget
     Q_OBJECT
 public:
     SeaWidget(QWidget *parent = 0);
-    SeaWidget(int shipSize, QWidget *parent = 0);
+    enum BattleFieldRole {
+        OWN = 0,
+        ENEMY = 1
+    };
+    SeaWidget(int shipSize, BattleFieldRole role, QWidget *parent = 0);
     int getShipSize() const;
     void clear();
 
@@ -27,13 +31,17 @@ private:
     const QRect targetSquare(const QPoint &position) const;
     int findPiece(const QRect &pieceRect) const;
     bool checkClash(int clickedCell) const;
+    /// Add piece of ship to cell.
     void addShipsPiece(int cell, QRect square, QPixmap piece);
+    /// Check whether we can add ship or not to cell
+    bool isEnoughPlaceForShip(int deck, int cell) const;
 
     int mBoardSize{0};
     QList<QPixmap> piecePixmaps;
     QList<QRect> pieceRects;
     QRect highlightedRect;
     QList<bool> mIsShipHere;
+    BattleFieldRole mBattlefieldRole;
 
 signals:
     

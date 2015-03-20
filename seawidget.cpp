@@ -11,8 +11,10 @@ SeaWidget::SeaWidget(QWidget *parent) :
 
 }
 
-SeaWidget::SeaWidget(int shipSize, QWidget *parent) :
-    mBoardSize(shipSize), QWidget(parent)
+SeaWidget::SeaWidget(int shipSize, BattleFieldRole role, QWidget *parent) :
+    mBoardSize(shipSize),
+    mBattlefieldRole(role),
+    QWidget(parent)
 {
     setAcceptDrops(true);
     setMinimumSize(mBoardSize, mBoardSize);
@@ -117,12 +119,31 @@ const QRect SeaWidget::targetSquare(const QPoint &position) const
 {
     return QRect(position.x()/getShipSize() * getShipSize(), position.y()/getShipSize() * getShipSize(), getShipSize(), getShipSize());
 }
+
 void SeaWidget::addShipsPiece(int cell, QRect square, QPixmap piece)
 {
     piecePixmaps.replace(cell,piece);
     pieceRects.replace(cell,square);
     mIsShipHere.replace(cell, true);
     update(square);
+}
+
+bool SeaWidget::isEnoughPlaceForShip(int deck, int cell) const
+{
+    // FIXME: check cell around ship
+    for(int i=1; i <= deck; i++) {
+        if(cell > 100 || mIsShipHere[cell++])
+            return false;
+    }
+    if((cell > 10 && (cell-deck) <= 9) || (cell > 21 && (cell-deck) <= 20) ||
+       (cell > 31 && (cell-deck) <= 30) || (cell > 41 && (cell-deck) <= 40) ||
+       (cell > 51 && (cell-deck) <= 50) || (cell > 61 && (cell-deck) <= 60) ||
+       (cell > 71 && (cell-deck) <= 70) || (cell > 81 && (cell-deck) <= 80) ||
+       (cell > 91 && (cell-deck) <= 90) || (cell > 101 && (cell-deck) <= 100))
+    {
+        return false;
+    }
+    return true;
 }
 
 void SeaWidget::dropEvent(QDropEvent *event)
@@ -144,15 +165,27 @@ void SeaWidget::dropEvent(QDropEvent *event)
         switch(dropedShipWidth)
         {
             case 40:
+                if(!isEnoughPlaceForShip(1, foundCell)) {
+                    event->ignore();
+                    return;
+                }
                 addShipsPiece(foundCell, square, pixmap);
                 break;
             case 80:
+                if(!isEnoughPlaceForShip(2, foundCell)) {
+                    event->ignore();
+                    return;
+                }
                 addShipsPiece(foundCell, square, pixmap.copy(0, 0, 40, 40));
 
                 square = targetSquare(QPoint(event->pos().x()+40, event->pos().y()));
                 addShipsPiece(++foundCell, square, pixmap.copy(40, 0, 80, 40));
                 break;
             case 120:
+                if(!isEnoughPlaceForShip(3, foundCell)) {
+                    event->ignore();
+                    return;
+                }
                 addShipsPiece(foundCell, square, pixmap.copy(0, 0, 40, 40));
 
                 square = targetSquare(QPoint(event->pos().x()+40, event->pos().y()));
@@ -162,6 +195,10 @@ void SeaWidget::dropEvent(QDropEvent *event)
                 addShipsPiece(++foundCell, square, pixmap.copy(80, 0, 40, 40));
                 break;
             case 160:
+                if(!isEnoughPlaceForShip(4, foundCell)) {
+                    event->ignore();
+                    return;
+                }
                 addShipsPiece(foundCell, square, pixmap.copy(0, 0, 40, 40));
 
                 square = targetSquare(QPoint(event->pos().x()+40, event->pos().y()));
@@ -205,6 +242,9 @@ bool SeaWidget::checkClash(int clickedCell) const
 
 void SeaWidget::mousePressEvent(QMouseEvent *event)
 {
+    // Disable friendly fire
+    if(mBattlefieldRole == OWN)
+        return;
     // ERROR: 9 position, next 11. where is 10th ???
     QRect square = targetSquare(event->pos());
     int found = findPiece(square);
