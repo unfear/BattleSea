@@ -1,6 +1,7 @@
 #include "uimanager.h"
 
-UIManager::UIManager()
+UIManager::UIManager(APP_ROLE role)
+    :mWindow(role)
 {
 
 }

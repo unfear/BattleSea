@@ -2,11 +2,12 @@
 #define UIMANAGER_H
 
 #include "mainwindow.h"
+#include "utility.h"
 
 class UIManager
 {
 public:
-    UIManager();
+    explicit UIManager(APP_ROLE role);
     ~UIManager();
 
     void drawWindow();

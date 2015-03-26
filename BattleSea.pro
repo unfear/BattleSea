@@ -17,14 +17,25 @@ SOURCES += main.cpp\
     seawidget.cpp \
     gamemanager.cpp \
     uimanager.cpp \
-    networkmanager.cpp
+    networkmanager.cpp \
+    client.cpp \
+    server.cpp \
+    socketapi.cpp \
+    qtnetwork.cpp
 
 HEADERS  += mainwindow.h \
     shipslist.h \
     seawidget.h \
     gamemanager.h \
     uimanager.h \
-    networkmanager.h
+    networkmanager.h \
+    networkstrategy.h \
+    context.h \
+    client.h \
+    server.h \
+    utility.h \
+    socketapi.h \
+    qtnetwork.h
 
 FORMS    += mainwindow.ui
 

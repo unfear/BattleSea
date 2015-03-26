@@ -21,7 +21,8 @@ public:
     void setApplicationRole();
 
 private:
-    UIManager mUIManager;
+    UIManager       *mUIManager;
+    NetworkManager  *mNetworkManager;
 };
 
 #endif // GAMEMANAGER_H

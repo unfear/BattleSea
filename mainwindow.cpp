@@ -4,10 +4,11 @@
 #include <QtWidgets>
 #include <stdlib.h>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(APP_ROLE role, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    mShipsNumber(4)
+    mShipsNumber(4),
+    mRole(role)
 {
     ui->setupUi(this);
     setupMenus();
@@ -80,7 +81,13 @@ void MainWindow::handleButton()
 
 void MainWindow::setupRoleLabel()
 {
-    mRoleLabel = new QLabel("You are Client", this);
+    if(mRole == UNKNOWN)
+        mRoleLabel = new QLabel("You are Unknown", this);
+    else if(mRole == CLIENT)
+        mRoleLabel = new QLabel("You are Client", this);
+    else if(mRole == SERVER)
+        mRoleLabel = new QLabel("You are Server", this);
+
     QPoint startPoint(ui->menuBar->sizeHint().rwidth()+mReadyBtn->size().rwidth()+10, 0);
     mRoleLabel->setGeometry(QRect(startPoint, QSize(100, 20)));
 }

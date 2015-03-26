@@ -7,6 +7,7 @@
 #include <memory>
 #include <QPushButton>
 #include <QLabel>
+#include "utility.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    explicit MainWindow(QWidget * parent = 0);
+    explicit MainWindow(APP_ROLE role, QWidget * parent = 0);
     ~MainWindow();
     
 private:
@@ -50,6 +51,8 @@ private:
     QPushButton * mReadyBtn;
     /// client or server role label
     QLabel * mRoleLabel;
+    /// client or server role
+    APP_ROLE mRole;
 
 public slots:
     /// load image from resources
