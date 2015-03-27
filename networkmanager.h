@@ -14,6 +14,8 @@ public:
     void setupRole();
     /// get client or server role
     APP_ROLE getRole() const;
+    /// run client/server
+    void run();
 
 private:
     /// set Client/Server context

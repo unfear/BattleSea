@@ -13,6 +13,7 @@ public:
     Client();
     virtual ~Client();
     virtual void setStrategy(NetworkStrategy *strategy) override;
+    virtual void runClientServer() override;
 private:
     NetworkStrategy * mStrategy;
 };

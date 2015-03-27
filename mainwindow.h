@@ -62,6 +62,8 @@ public slots:
 
 private slots:
     void handleButton();
+signals:
+    void readyToPlay();
 };
 
 #endif // MAINWINDOW_H

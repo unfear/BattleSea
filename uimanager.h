@@ -4,8 +4,9 @@
 #include "mainwindow.h"
 #include "utility.h"
 
-class UIManager
+class UIManager : public QObject
 {
+    Q_OBJECT
 public:
     explicit UIManager(APP_ROLE role);
     ~UIManager();
@@ -14,7 +15,10 @@ public:
 
 private:
     MainWindow mWindow;
-
+public slots:
+    void notifyReadyToPlay();
+signals:
+    void notifyReady();
 };
 
 #endif // UIMANAGER_H

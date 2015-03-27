@@ -1,4 +1,5 @@
 #include "server.h"
+#include "utility.h"
 
 Server::Server()
 {
@@ -13,4 +14,11 @@ Server::~Server()
 void Server::setStrategy(NetworkStrategy *strategy)
 {
     mStrategy = strategy;
+}
+
+void Server::runClientServer()
+{
+    cout << "RUN SERVER" << endl;
+    mStrategy->initSocket();
+    mStrategy->runServer();
 }

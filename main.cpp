@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     GameManager game;
     game.setApplicationRole();
     game.createUI();
+//    game.runClientServer();
 
     return a.exec();
 }

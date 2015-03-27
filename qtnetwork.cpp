@@ -14,7 +14,7 @@ void QtNetwork::initSocket()
 {
 
 }
-void QtNetwork::runClient()
+bool QtNetwork::runClient()
 {
 
 }
@@ -22,7 +22,7 @@ void QtNetwork::stopClient()
 {
 
 }
-void QtNetwork::runServer()
+bool QtNetwork::runServer()
 {
 
 }

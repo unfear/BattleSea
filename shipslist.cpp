@@ -1,9 +1,7 @@
 #include <QtGui>
 
 #include "shipslist.h"
-#include <QTextStream>
-
-QTextStream ccout(stdout);
+#include "utility.h"
 
 ShipsList::ShipsList(int shipSize, QWidget *parent) :
     mShipSize(shipSize), QListWidget(parent),
@@ -62,7 +60,7 @@ void ShipsList::dragMoveEvent(QDragMoveEvent *event)
 
 void ShipsList::startDrag(Qt::DropActions /*supportedActions*/)
 {
-    ccout << "startDrag" << endl;
+    cout << "startDrag" << endl;
     QListWidgetItem *item = currentItem();
 
     QByteArray itemData;

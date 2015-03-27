@@ -77,6 +77,8 @@ void MainWindow::handleButton()
 {
     QIcon icon(":/images/images/ready.png");
     mReadyBtn->setIcon(icon);
+    // emit signal
+    emit readyToPlay();
 }
 
 void MainWindow::setupRoleLabel()

@@ -9,9 +9,9 @@ public:
     QtNetwork();
     virtual ~QtNetwork();
     virtual void initSocket() override;
-    virtual void runClient() override;
+    virtual bool runClient() override;
     virtual void stopClient() override;
-    virtual void runServer() override;
+    virtual bool runServer() override;
     virtual void stopServer() override;
     virtual void sendData() override;
     virtual void receiveData() override;

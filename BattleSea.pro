@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     client.cpp \
     server.cpp \
     socketapi.cpp \
-    qtnetwork.cpp
+    qtnetwork.cpp \
+    utility.cpp
 
 HEADERS  += mainwindow.h \
     shipslist.h \

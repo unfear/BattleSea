@@ -8,8 +8,9 @@
  * @brief The GameManager class
  * creates UI and set role of app (client or server)
  */
-class GameManager
+class GameManager : public QObject
 {
+    Q_OBJECT
 public:
     GameManager();
     ~GameManager();
@@ -23,6 +24,9 @@ public:
 private:
     UIManager       *mUIManager;
     NetworkManager  *mNetworkManager;
+public slots:
+    /// start client/server
+    void runClientServer();
 };
 
 #endif // GAMEMANAGER_H

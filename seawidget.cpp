@@ -1,9 +1,7 @@
 #include "seawidget.h"
 #include <QtGui>
 #include <stdio.h>
-#include <QTextStream>
-
-QTextStream cout(stdout);
+#include "utility.h"
 
 SeaWidget::SeaWidget(QWidget *parent) :
     QWidget(parent)

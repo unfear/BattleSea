@@ -10,6 +10,7 @@ public:
     virtual ~Context(){}
     /// select Socket API or QNetwork API interface
     virtual void setStrategy(NetworkStrategy* strategy) = 0;
+    virtual void runClientServer() = 0;
 };
 
 #endif // CONTEXT_H

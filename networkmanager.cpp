@@ -2,6 +2,7 @@
 
 #include "client.h"
 #include "server.h"
+#include "socketapi.h"
 
 NetworkManager::NetworkManager()
     : mContext(nullptr),
@@ -18,6 +19,13 @@ NetworkManager::~NetworkManager()
 void NetworkManager::setContext(Context * context)
 {
     mContext = context;
+    mContext->setStrategy(new SocketAPI);
+//    mContext->runClientServer();
+}
+
+void NetworkManager::run()
+{
+    mContext->runClientServer();
 }
 
 void NetworkManager::setupRole()
@@ -34,7 +42,8 @@ void NetworkManager::setupRole()
         setContext(new Server);
     }
     */
-    mRole = UNKNOWN;
+    setContext(new Server);
+    mRole = SERVER;
 }
 
 APP_ROLE NetworkManager::getRole() const
