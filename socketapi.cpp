@@ -10,7 +10,8 @@ int SocketAPI::mCountThreadCalls = 0;
 SocketAPI::SocketAPI()
     : mPort(0),
       mHost(""),
-      mSocket(0)
+      mSocket(0),
+      mListener(nullptr)
 {
 }
 
@@ -170,8 +171,16 @@ void* SocketAPI::serverChildThreadFunc(void* data)
             sendto(appData->mSocket, buffer, sizeof(buffer), 0, (struct sockaddr *)&(appData->mDest), (socklen_t)addrLen);
             cout << "reply: " << buffer << " to socket: " << appData->mSocket << endl;
         }
+        else if(event.event == SEND_EVENT::FIRE) {
+            appData->mListener->onReceiveData(event);
+        }
 
     }while( bytes > 0 && strcmp(buffer, "quit") != 0);
 
     appData->mCtrlCSig = true;
+}
+
+void SocketAPI::setListener(Listener * listener)
+{
+    mListener = listener;
 }

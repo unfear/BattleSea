@@ -4,7 +4,8 @@
 #include "utility.h"
 
 SeaWidget::SeaWidget(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent),
+    mListener(nullptr)
 {
 
 }
@@ -12,7 +13,8 @@ SeaWidget::SeaWidget(QWidget *parent) :
 SeaWidget::SeaWidget(int shipSize, BattleFieldRole role, QWidget *parent) :
     mBoardSize(shipSize),
     mBattlefieldRole(role),
-    QWidget(parent)
+    QWidget(parent),
+    mListener(nullptr)
 {
     setAcceptDrops(true);
     setMinimumSize(mBoardSize, mBoardSize);
@@ -247,6 +249,8 @@ void SeaWidget::mousePressEvent(QMouseEvent *event)
     QRect square = targetSquare(event->pos());
     int found = findPiece(square);
     cout << "Clicked to " << found << " position!" << endl;
+//    enemyFireProcess(found);
+
     if(checkClash(found))
     {
         //TODO: add hit ships icon to piecePixmaps[found]
@@ -270,4 +274,43 @@ void SeaWidget::mousePressEvent(QMouseEvent *event)
         pieceRects.replace(found,square);
     }
     update(square);
+
+    if(mListener != nullptr)
+    {
+        /// FIXME: event.x now is cell number.
+        /// Change FireEvent class for only cell number pass intead of x,y coords.
+        FireEvent eventData{found, 0, SEND_EVENT::FIRE};
+        mListener->onSendData(eventData);
+    }
+}
+
+void SeaWidget::enemyFireProcess(int cell)
+{
+    // FIXME: the problem is in pieceRects[cell] instead of QRect found
+    if(checkClash(cell))
+    {
+        //TODO: add hit ships icon to piecePixmaps[found]
+        cout << "BANG!" << endl;
+        QPixmap hitCross(":/images/images/hitCross.png");
+        QPainter pixPaint(&piecePixmaps[cell]);
+        QBrush brush2( Qt::blue);
+        pixPaint.setBrush(brush2);
+        pixPaint.drawImage(QPoint(10,10),hitCross.toImage());
+        pieceRects.replace(cell, pieceRects[cell]);
+    }
+    else
+    {
+        //TODO: add miss point icon to piecePixmaps[found]
+        cout << "MISS!" << endl;
+        QPixmap missDot(":/images/images/missDot.png");
+        piecePixmaps.replace(cell, missDot);
+        pieceRects.replace(cell, pieceRects[cell]);
+    }
+//    update(pieceRects[cell]);
+    update(0, 0, 400, 400);
+}
+
+void SeaWidget::setListener(Listener * listener)
+{
+    mListener = listener;
 }

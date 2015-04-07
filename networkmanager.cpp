@@ -20,6 +20,12 @@ void NetworkManager::setContext(Context * context)
 {
     mContext = context;
     mContext->setStrategy(new SocketAPI);
+
+}
+
+void NetworkManager::setListener(Listener * listener)
+{
+    mContext->setListener(listener);
 }
 
 void NetworkManager::run()
@@ -27,7 +33,7 @@ void NetworkManager::run()
     mContext->runClientServer();
 }
 
-void NetworkManager::setupRole()
+void NetworkManager::setupRole(Listener * listener)
 {
     SocketAPI tmpStratedy;
     if(tmpStratedy.getRole() == CLIENT) {
@@ -40,9 +46,20 @@ void NetworkManager::setupRole()
         setContext(new Server);
         mRole = SERVER;
     }
+    setListener(listener);
 }
 
 APP_ROLE NetworkManager::getRole() const
 {
     return mRole;
+}
+
+void NetworkManager::onSend(FireEvent eventData)
+{
+    mContext->onSend(eventData);
+}
+
+void NetworkManager::onReceive(FireEvent eventData)
+{
+
 }

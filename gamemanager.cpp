@@ -21,12 +21,22 @@ void GameManager::runClientServer()
 
 void GameManager::createUI()
 {
-    mUIManager = new UIManager(mNetworkManager->getRole());
+    mUIManager = new UIManager(mNetworkManager->getRole(), this);
     mUIManager->drawWindow();
     connect(mUIManager, SIGNAL(notifyReady()), this, SLOT(runClientServer()));
 }
 
 void GameManager::setApplicationRole()
 {
-    mNetworkManager->setupRole();
+    mNetworkManager->setupRole(this);
+}
+
+void GameManager::onSendData(FireEvent eventData)
+{
+    mNetworkManager->onSend(eventData);
+}
+
+void GameManager::onReceiveData(FireEvent eventData)
+{
+    mUIManager->catchEnemysFire(eventData);
 }

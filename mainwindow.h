@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include "utility.h"
+#include "listener.h"
 
 namespace Ui {
 class MainWindow;
@@ -19,16 +20,27 @@ class MainWindow : public QMainWindow
     
 public:
     explicit MainWindow(APP_ROLE role, QWidget * parent = 0);
+
     ~MainWindow();
     
+    /// set listener for data send notification
+    void setListener(Listener * listener);
+
+    /// check fired cell in seawidget
+    void catchFireAndCheck(FireEvent eventData);
+
 private:
     Ui::MainWindow * ui;
+
     /// add menu to window
     void setupMenus();
+
     /// add ships list, battlefields to window
     void setupWidgets();
+
     /// add Ready button
     void setupReadyButton();
+
     /// add role label
     void setupRoleLabel();
 

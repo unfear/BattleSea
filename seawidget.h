@@ -5,19 +5,34 @@
 #include <QPoint>
 #include <QPixmap>
 #include <QWidget>
+#include "listener.h"
 
 class SeaWidget : public QWidget
 {
     Q_OBJECT
 public:
     SeaWidget(QWidget *parent = 0);
+
+    /// set role for the field. Because we have two the same fields.
+    /// Left one is our's but the right one is enemy's field.
     enum BattleFieldRole {
         OWN = 0,
         ENEMY = 1
     };
+
     SeaWidget(int shipSize, BattleFieldRole role, QWidget *parent = 0);
+
+    /// returns ship size
     int getShipSize() const;
+
+    /// clear sea dashboard
     void clear();
+
+    /// set listener to notify when data should be send.
+    void setListener(Listener * listener);
+
+    /// check whether enemy BANG or MISS by ship
+    void enemyFireProcess(int cell);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
@@ -42,6 +57,7 @@ private:
     QRect highlightedRect;
     QList<bool> mIsShipHere;
     BattleFieldRole mBattlefieldRole;
+    Listener * mListener;   // Shouldn't be deleted
 
 signals:
     

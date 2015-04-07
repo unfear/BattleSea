@@ -15,6 +15,7 @@ public:
     virtual void stopServer() override;
     virtual void sendData(FireEvent event) override;
     virtual void receiveData() override;
+    virtual void setListener(Listener * listener) override;
 };
 
 #endif // QTNETWORK_H

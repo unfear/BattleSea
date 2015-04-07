@@ -38,3 +38,8 @@ void QtNetwork::receiveData()
 {
 
 }
+
+void QtNetwork::setListener(Listener * listener)
+{
+
+}

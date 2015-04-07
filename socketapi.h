@@ -14,6 +14,7 @@
 #include <pthread.h>
 
 #include "networkstrategy.h"
+#include "listener.h"
 
 class SocketAPI : public NetworkStrategy
 {
@@ -28,6 +29,7 @@ public:
     virtual void sendData(FireEvent event) override;
     virtual void receiveData() override;
     virtual APP_ROLE getRole() override;
+    virtual void setListener(Listener * listener) override;
 private:
     /// runable func for pthread_create. Waits for msg from client
     static void* serverChildThreadFunc(void* arg);
@@ -39,6 +41,7 @@ private:
     std::string mHost;
     std::string mMessageBuffer;
     struct sockaddr_in mDest;
+    Listener * mListener; /// Shouldn't be deleted
 
     static bool mCtrlCSig;
     static int mCountThreadCalls;

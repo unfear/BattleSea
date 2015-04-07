@@ -2,6 +2,7 @@
 #define NETWORKSTRATEGY
 
 #include "utility.h"
+#include "listener.h"
 
 class NetworkStrategy
 {
@@ -16,6 +17,9 @@ public:
     virtual void sendData(FireEvent event) = 0;
     virtual void receiveData() = 0;
     virtual APP_ROLE getRole() = 0;
+
+    /// set listener to notify when data received and check BANG or MISS required.
+    virtual void setListener(Listener * listener) = 0;
 };
 
 #endif // NETWORKSTRATEGY

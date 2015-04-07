@@ -36,7 +36,8 @@ HEADERS  += mainwindow.h \
     server.h \
     utility.h \
     socketapi.h \
-    qtnetwork.h
+    qtnetwork.h \
+    listener.h
 
 FORMS    += mainwindow.ui
 

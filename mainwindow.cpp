@@ -131,3 +131,13 @@ void MainWindow::setupShips()
 //    for(int i = 0; i < mShipsNumber; i++)
 //        shipsList->addShip(mOneDeckShipImage, QPoint());
 }
+
+void MainWindow::setListener(Listener * listener)
+{
+    seaWidgetEnemy->setListener(listener);
+}
+
+void MainWindow::catchFireAndCheck(FireEvent eventData)
+{
+    seaWidget->enemyFireProcess(eventData.x);
+}

@@ -21,3 +21,18 @@ void Client::runClientServer()
     mStrategy->initSocket();
     mStrategy->runClient();
 }
+
+void Client::onSend(FireEvent eventData)
+{
+    mStrategy->sendData(eventData);
+}
+
+void Client::onReceive(FireEvent eventData)
+{
+
+}
+
+void Client::setListener(Listener * listener)
+{
+    mStrategy->setListener(listener);
+}
