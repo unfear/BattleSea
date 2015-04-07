@@ -13,7 +13,7 @@ public:
     virtual void stopClient() override;
     virtual bool runServer() override;
     virtual void stopServer() override;
-    virtual void sendData() override;
+    virtual void sendData(FireEvent event) override;
     virtual void receiveData() override;
 };
 

@@ -30,7 +30,7 @@ void QtNetwork::stopServer()
 {
 
 }
-void QtNetwork::sendData()
+void QtNetwork::sendData(FireEvent event)
 {
 
 }

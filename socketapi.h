@@ -2,6 +2,10 @@
 #define SOCKETAPI_H
 
 #include <sys/socket.h>
+
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include <resolv.h>
 #include <string>
 #include <string.h>
@@ -21,8 +25,9 @@ public:
     virtual void stopClient() override;
     virtual bool runServer() override;
     virtual void stopServer() override;
-    virtual void sendData() override;
+    virtual void sendData(FireEvent event) override;
     virtual void receiveData() override;
+    virtual APP_ROLE getRole() override;
 private:
     /// runable func for pthread_create. Waits for msg from client
     static void* serverChildThreadFunc(void* arg);

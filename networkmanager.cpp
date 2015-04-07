@@ -20,7 +20,6 @@ void NetworkManager::setContext(Context * context)
 {
     mContext = context;
     mContext->setStrategy(new SocketAPI);
-//    mContext->runClientServer();
 }
 
 void NetworkManager::run()
@@ -30,20 +29,17 @@ void NetworkManager::run()
 
 void NetworkManager::setupRole()
 {
-    // TODO: Asquire role
-    // ....
-    // bool client = ...
-
-    /*
-    if(client) {
+    SocketAPI tmpStratedy;
+    if(tmpStratedy.getRole() == CLIENT) {
+        cout << "ROLE IS CLIENT" << endl;
         setContext(new Client);
+        mRole = CLIENT;
     }
     else {
+        cout << "ROLE IS SERVER" << endl;
         setContext(new Server);
+        mRole = SERVER;
     }
-    */
-    setContext(new Server);
-    mRole = SERVER;
 }
 
 APP_ROLE NetworkManager::getRole() const
